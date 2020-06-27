@@ -1,3 +1,4 @@
+import 'package:flame_and_watch/widgets/console.dart';
 import 'package:flutter/material.dart';
 
 class FlameAndWatchScreen extends StatelessWidget {
@@ -6,7 +7,7 @@ class FlameAndWatchScreen extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         body: Center(
-          child: Text('Hi'),
+          child: Console(),
         ),
       ),
     );

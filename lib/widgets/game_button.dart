@@ -30,17 +30,15 @@ class _GameButtonState extends State<GameButton> {
 
   @override
   Widget build(BuildContext ctx) {
-    final size = MediaQuery.of(ctx).size.width * 0.8;
-
     return GestureDetector(
       onTapDown: handleTapDown,
       onTapCancel: handleTapCancel,
       onTapUp: handleTapUp,
       child: Container(
-        height: size,
-        width: size,
+        height: widget.size,
+        width: widget.size,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(size / 2),
+          borderRadius: BorderRadius.circular(widget.size / 2),
           border: Border.all(
             width: 10,
             color: Colors.black,
@@ -49,7 +47,7 @@ class _GameButtonState extends State<GameButton> {
         child: Container(
           decoration: BoxDecoration(
             color: pressed ? Color(0xff9f2427) : Color(0xffBE3639),
-            borderRadius: BorderRadius.circular(size / 2),
+            borderRadius: BorderRadius.circular(widget.size / 2),
             boxShadow: [
               BoxShadow(
                 color: Color(0xff7D333F),
