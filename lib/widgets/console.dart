@@ -25,6 +25,10 @@ class Console extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text('LEFT'),
+                  SizedBox(
+                    height: 10,
+                  ),
                   GameButton(
                     size: 80,
                     onClick: () {},
@@ -36,10 +40,29 @@ class Console extends StatelessWidget {
           Expanded(
             flex: 6,
             child: Container(
-              child: Column(
-                children: [
-                  Game(),
-                ],
+              decoration: BoxDecoration(
+                color: Color(0xffc6cacb),
+                border: Border(
+                  top: BorderSide(width: 20, color: Color(0xFFb2b6b8)),
+                  left: BorderSide(width: 20, color: Color(0xFFbabebf)),
+                  right: BorderSide(width: 20, color: Color(0xFFbabebf)),
+                  bottom: BorderSide(width: 20, color: Color(0xffa6a9ab)),
+                ),
+              ),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Color(0xffc6cacb),
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: Color(0xff662a31),
+                    width: 12,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Game(),
+                  ],
+                ),
               ),
             ),
           ),
@@ -50,6 +73,10 @@ class Console extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Text('RIGHT'),
+                  SizedBox(
+                    height: 10,
+                  ),
                   GameButton(
                     size: 80,
                     onClick: () {},
