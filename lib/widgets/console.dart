@@ -10,13 +10,12 @@ class Console extends StatefulWidget {
 }
 
 class _ConsoleState extends State<Console> {
-
   FlameWatchGame _game;
 
   @override
   Widget build(_) {
     return Container(
-      padding: EdgeInsets.only(top: 25, bottom: 50, left: 10, right: 10),
+      padding: EdgeInsets.only(top: 25, bottom: 25, left: 10, right: 10),
       decoration: BoxDecoration(
         color: Color(0xffc6cacb),
         border: Border(
@@ -35,16 +34,31 @@ class _ConsoleState extends State<Console> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('LEFT'),
-                  SizedBox(
-                    height: 10,
-                  ),
                   GameButton(
                     size: 80,
                     onClick: () {
                       _game?.onLeft();
                     },
-                  )
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(
+                        Icons.arrow_left,
+                        size: 40,
+                      ),
+                      Text(
+                        'LEFT',
+                        style: TextStyle(
+                          fontFamily: 'Liberation Sans',
+                          fontSize: 20,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -63,32 +77,28 @@ class _ConsoleState extends State<Console> {
                 ),
               ),
               child: Container(
-                decoration: BoxDecoration(
-                  color: Color(0xffc6cacb),
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(
-                    color: Color(0xff662a31),
-                    width: 12,
+                  decoration: BoxDecoration(
+                    color: Color(0xffc6cacb),
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: Color(0xff662a31),
+                      width: 12,
+                    ),
                   ),
-                ),
-                child: LayoutBuilder(
-                    builder: (ctx, constraints) {
-                      final size = Size(constraints.maxWidth, constraints.maxHeight);
+                  child: LayoutBuilder(builder: (ctx, constraints) {
+                    final size = Size(constraints.maxWidth, constraints.maxHeight);
 
-                      return FutureBuilder<FlameWatchGame>(
-                          future: loadSampleGame(size),
-                          builder: (_, snapshot) {
-                            _game = snapshot.data;
-                            if (snapshot.hasData) {
-                              return Container(child: _game.widget);
-                            }
-
-                            return Container();
+                    return FutureBuilder<FlameWatchGame>(
+                        future: loadSampleGame(size),
+                        builder: (_, snapshot) {
+                          _game = snapshot.data;
+                          if (snapshot.hasData) {
+                            return Container(child: _game.widget);
                           }
-                      );
-                    }
-                )
-              ),
+
+                          return Container();
+                        });
+                  })),
             ),
           ),
           Expanded(
@@ -98,16 +108,31 @@ class _ConsoleState extends State<Console> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Text('RIGHT'),
-                  SizedBox(
-                    height: 10,
-                  ),
                   GameButton(
                     size: 80,
                     onClick: () {
                       _game?.onRight();
                     },
-                  )
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        'RIGHT',
+                        style: TextStyle(
+                          fontFamily: 'Liberation Sans',
+                          fontSize: 20,
+                        ),
+                      ),
+                      Icon(
+                        Icons.arrow_right,
+                        size: 40,
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

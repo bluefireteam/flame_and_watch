@@ -40,7 +40,7 @@ class _GameButtonState extends State<GameButton> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(widget.size / 2),
           border: Border.all(
-            width: 10,
+            width: 11,
             color: Colors.black,
           ),
         ),
