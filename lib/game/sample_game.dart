@@ -9,14 +9,23 @@ class BallGameController extends FlameWatchGameController {
 
   int i = 1;
 
-  void onLeft() {}
-  void onRight() {}
-  void onTick() {
+  void onLeft() {
+    findSprite('ball$i').active = false;
+
+    i -= 1;
+    if (i == 0) i = 3;
+    findSprite('ball$i').active = true;
+  }
+
+  void onRight() {
     findSprite('ball$i').active = false;
 
     i += 1;
     if (i == 4) i =1;
     findSprite('ball$i').active = true;
+  }
+
+  void onTick() {
   }
 }
 

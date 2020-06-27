@@ -15,7 +15,6 @@ class FlameWatchGame extends Game {
 
   final _opaquePaint = Paint()..color = Color(0xFFFFFFFF).withOpacity(0.1);
 
-  Size _gameSize;
   FlameWatchGameCartridge _cartridge;
   FlameWatchGameController _controller;
   double _gameScale;
@@ -33,7 +32,6 @@ class FlameWatchGame extends Game {
       FlameWatchGameController controller,
     ) async {
     final game = FlameWatchGame()
-        .._gameSize = gameSize
         .._cartridge = gameCartridge
         .._controller = controller;
 
@@ -82,4 +80,12 @@ class FlameWatchGame extends Game {
 
   @override
   Color backgroundColor() => const Color(0xFF8D9E8C);
+
+  void onLeft() {
+    _controller.onLeft();
+  }
+
+  void onRight() {
+    _controller.onRight();
+  }
 }

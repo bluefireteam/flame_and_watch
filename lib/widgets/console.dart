@@ -1,8 +1,18 @@
-import 'package:flame_and_watch/widgets/game.dart';
 import 'package:flame_and_watch/widgets/game_button.dart';
 import 'package:flutter/material.dart';
 
-class Console extends StatelessWidget {
+import '../game/game.dart';
+import '../game/sample_game.dart';
+
+class Console extends StatefulWidget {
+  @override
+  State createState() => _ConsoleState();
+}
+
+class _ConsoleState extends State<Console> {
+
+  FlameWatchGame _game;
+
   @override
   Widget build(_) {
     return Container(
@@ -31,7 +41,9 @@ class Console extends StatelessWidget {
                   ),
                   GameButton(
                     size: 80,
-                    onClick: () {},
+                    onClick: () {
+                      _game?.onLeft();
+                    },
                   )
                 ],
               ),
@@ -40,13 +52,14 @@ class Console extends StatelessWidget {
           Expanded(
             flex: 6,
             child: Container(
+              padding: EdgeInsets.all(15),
               decoration: BoxDecoration(
                 color: Color(0xffc6cacb),
                 border: Border(
-                  top: BorderSide(width: 20, color: Color(0xFFb2b6b8)),
-                  left: BorderSide(width: 20, color: Color(0xFFbabebf)),
-                  right: BorderSide(width: 20, color: Color(0xFFbabebf)),
-                  bottom: BorderSide(width: 20, color: Color(0xffa6a9ab)),
+                  top: BorderSide(width: 15, color: Color(0xFFb2b6b8)),
+                  left: BorderSide(width: 15, color: Color(0xFFbabebf)),
+                  right: BorderSide(width: 15, color: Color(0xFFbabebf)),
+                  bottom: BorderSide(width: 15, color: Color(0xffa6a9ab)),
                 ),
               ),
               child: Container(
@@ -58,11 +71,23 @@ class Console extends StatelessWidget {
                     width: 12,
                   ),
                 ),
-                child: Column(
-                  children: [
-                    Game(),
-                  ],
-                ),
+                child: LayoutBuilder(
+                    builder: (ctx, constraints) {
+                      final size = Size(constraints.maxWidth, constraints.maxHeight);
+
+                      return FutureBuilder<FlameWatchGame>(
+                          future: loadSampleGame(size),
+                          builder: (_, snapshot) {
+                            _game = snapshot.data;
+                            if (snapshot.hasData) {
+                              return Container(child: _game.widget);
+                            }
+
+                            return Container();
+                          }
+                      );
+                    }
+                )
               ),
             ),
           ),
@@ -79,7 +104,9 @@ class Console extends StatelessWidget {
                   ),
                   GameButton(
                     size: 80,
-                    onClick: () {},
+                    onClick: () {
+                      _game?.onRight();
+                    },
                   )
                 ],
               ),
