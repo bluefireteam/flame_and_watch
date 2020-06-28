@@ -14,11 +14,17 @@ class SwitchButton extends StatefulWidget {
 }
 
 class _SwitchButtonState extends State<SwitchButton> {
-  bool status = true;
+  bool _status = true;
 
   void handleChange(value) {
-    setState(() => status = value);
+    setState(() => _status = value);
     widget.onChange();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _status = widget.on;
   }
 
   @override
@@ -47,7 +53,7 @@ class _SwitchButtonState extends State<SwitchButton> {
               activeColor: Color(0xff8a3842),
               activeTrackColor: Color(0xff86898a),
               inactiveThumbColor: Color(0xff8a3842),
-              value: status,
+              value: _status,
               onChanged: handleChange,
               materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
             ),
