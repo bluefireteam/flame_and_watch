@@ -22,6 +22,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/audio/sfxs/
   fonts:
     - family: Liberation Sans
       fonts:

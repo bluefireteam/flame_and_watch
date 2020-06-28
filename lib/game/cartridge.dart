@@ -1,5 +1,8 @@
 import 'package:meta/meta.dart';
 import 'package:flame/position.dart';
+import 'package:flame/flame.dart';
+
+import '../settings_manager.dart';
 
 enum GameDigitalDisplaySize {
   SMALL, MEDIUM, BIG,
@@ -52,6 +55,12 @@ abstract class FlameWatchGameController {
 
   void setDisplayText(String id, String text) {
     cartridge.digitalDisplays[id].text = text;
+  }
+
+  void sfx(String file) {
+    if (SettingsManager.isSoundOn()) {
+      Flame.audio.play('sfxs/$file');
+    }
   }
 
   void onLeft();

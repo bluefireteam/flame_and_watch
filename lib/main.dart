@@ -6,6 +6,12 @@ import './flame_and_watch.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Flame.audio.loadAll([
+    'sfxs/drown.wav',
+    'sfxs/rescue.wav',
+    'sfxs/gameover.wav',
+  ]);
   if (!kIsWeb) {
     await Flame.util.fullScreen();
     await Flame.util.setLandscape();
