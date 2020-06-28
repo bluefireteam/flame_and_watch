@@ -16,7 +16,7 @@ class Console extends StatefulWidget {
 
 class _ConsoleState extends State<Console> {
   FlameWatchGame _game;
-  String activeGame = 'PARACHUTE';
+  String activeGame = 'CLOCK';
 
   bool isParachuteGame() => activeGame == 'PARACHUTE';
 

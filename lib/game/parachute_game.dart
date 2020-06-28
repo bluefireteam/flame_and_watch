@@ -22,7 +22,7 @@ class ParachuteGameController extends FlameWatchGameController {
   int miss = 0;
 
   int difficultProgression = 0;
-  double difficult = 0.1;
+  double difficult = 0.2;
 
   bool newFalling = false;
 
@@ -279,10 +279,10 @@ Future<FlameWatchGame> loadParachuteGame(Size size) async {
         GameSprite(id: 'drowing-3-1', x: 88, y: 78, spriteName: 'drowing-1', active: false),
         GameSprite(id: 'drowing-3-2', x: 94, y: 90, spriteName: 'drowing-2', active: false),
 
-        GameSprite(id: 'miss-label', x: 110, y: 84, spriteName: 'miss-label', active: true),
-        GameSprite(id: 'miss-marker-1', x: 122, y: 91, spriteName: 'miss-marker', active: false),
-        GameSprite(id: 'miss-marker-2', x: 116, y: 91, spriteName: 'miss-marker', active: false),
-        GameSprite(id: 'miss-marker-3', x: 110, y: 91, spriteName: 'miss-marker', active: false),
+        GameSprite(id: 'miss-label', x: 27, y: 5, spriteName: 'miss-label', active: true),
+        GameSprite(id: 'miss-marker-1', x: 39, y: 12, spriteName: 'miss-marker', active: false),
+        GameSprite(id: 'miss-marker-2', x: 33, y: 12, spriteName: 'miss-marker', active: false),
+        GameSprite(id: 'miss-marker-3', x: 27, y: 12, spriteName: 'miss-marker', active: false),
       ],
        digitalDisplays: {
          'score': GameDigitalDisplay(position: Position(5, 5)),
