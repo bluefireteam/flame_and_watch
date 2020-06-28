@@ -13,37 +13,11 @@ class SideConsole extends StatelessWidget {
     return Expanded(
       flex: 2,
       child: Container(
-        padding: EdgeInsets.only(bottom: 65),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            topContentBox != null
-                ? Column(
-                    children: [
-                      Container(
-                        width: 100,
-                        decoration: BoxDecoration(
-                          color: Color(0xffd5dadb),
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(),
-                        ),
-                        child: topContentBox,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.only(top: 2),
-                        child: Text(
-                          'Fireslime',
-                          style: TextStyle(
-                            fontFamily: 'Firealistic',
-                            fontSize: 14,
-                            color: Color(0xff6c6e70),
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                : Container(),
+            topContentBox ?? Container(),
             Column(
               children: [
                 GameButton(

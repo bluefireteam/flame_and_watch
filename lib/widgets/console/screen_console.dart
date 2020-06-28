@@ -1,5 +1,3 @@
-import 'package:flame_and_watch/settings_manager.dart';
-import 'package:flame_and_watch/widgets/swtich_button.dart';
 import 'package:flutter/material.dart';
 
 class ScreenConsole extends StatelessWidget {
@@ -45,16 +43,6 @@ class ScreenConsole extends StatelessWidget {
                     ),
                     child: child),
               ),
-            ),
-          ),
-          Container(
-            padding: EdgeInsets.only(top: 5),
-            child: SwitchButton(
-              on: SettingsManager.isSoundOn(),
-              onChange: () {
-                SettingsManager.switchSound();
-              },
-              label: 'Sound',
             ),
           ),
         ],

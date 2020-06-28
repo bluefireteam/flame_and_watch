@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:flame_and_watch/widgets/console/screen_console.dart';
 import 'package:flame_and_watch/widgets/console/side_console.dart';
-import 'package:flutter/material.dart';
+import 'package:flame_and_watch/settings_manager.dart';
+import 'package:flame_and_watch/widgets/swtich_button.dart';
 
 import '../../game/game.dart';
 import '../../game/sample_game.dart';
@@ -16,7 +18,7 @@ class _ConsoleState extends State<Console> {
   @override
   Widget build(_) {
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 5),
+      padding: EdgeInsets.only(top: 20, bottom: 20),
       decoration: BoxDecoration(
         color: Color(0xffc6cacb),
         border: Border(
@@ -35,17 +37,49 @@ class _ConsoleState extends State<Console> {
             buttonLabel: '< LEFT',
             topContentBox: Column(
               children: [
-                Text(
-                  'FLAME',
-                  style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: Color(0xffd5dadb),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        'FLAME',
+                        style: TextStyle(
+                            fontFamily: 'Firealistic',
+                            fontSize: 20,
+                            color: Color(0xff8a3842)),
+                      ),
+                      Text(
+                        '&',
+                        style: TextStyle(
+                            fontFamily: 'Firealistic',
+                            fontSize: 20,
+                            color: Color(0xff8a3842)),
+                      ),
+                      Text(
+                        'WATCH',
+                        style: TextStyle(
+                            fontFamily: 'Firealistic',
+                            fontSize: 20,
+                            color: Color(0xff8a3842)),
+                      ),
+                    ],
+                  ),
                 ),
-                Text(
-                  '&',
-                  style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
-                ),
-                Text(
-                  'WATCH',
-                  style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                Padding(
+                  padding: EdgeInsets.only(top: 2),
+                  child: Text(
+                    'Fireslime',
+                    style: TextStyle(
+                      fontFamily: 'Firealistic',
+                      fontSize: 14,
+                      color: Color(0xff6c6e70),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -70,11 +104,20 @@ class _ConsoleState extends State<Console> {
             ),
           ),
           SideConsole(
-            buttonClick: () {
-              _game?.onRight();
-            },
-            buttonLabel: 'RIGHT >',
-          ),
+              buttonClick: () {
+                _game?.onRight();
+              },
+              buttonLabel: 'RIGHT >',
+              topContentBox: Container(
+                padding: EdgeInsets.only(top: 5),
+                child: SwitchButton(
+                  on: SettingsManager.isSoundOn(),
+                  onChange: () {
+                    SettingsManager.switchSound();
+                  },
+                  label: 'Sound',
+                ),
+              )),
         ],
       ),
     );
