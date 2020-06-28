@@ -16,7 +16,7 @@ class _ConsoleState extends State<Console> {
   @override
   Widget build(_) {
     return Container(
-      padding: EdgeInsets.only(top: 20, bottom: 20),
+      padding: EdgeInsets.only(top: 20, bottom: 5),
       decoration: BoxDecoration(
         color: Color(0xffc6cacb),
         border: Border(

@@ -13,6 +13,7 @@ class SideConsole extends StatelessWidget {
     return Expanded(
       flex: 2,
       child: Container(
+        padding: EdgeInsets.only(bottom: 65),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,

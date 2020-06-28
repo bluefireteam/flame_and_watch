@@ -1,3 +1,4 @@
+import 'package:flame_and_watch/settings_manager.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flame/flame.dart';
@@ -9,5 +10,7 @@ void main() async {
     await Flame.util.fullScreen();
     await Flame.util.setLandscape();
   }
+  await SettingsManager.load();
+
   runApp(FlameAndWatchScreen());
 }
