@@ -1,33 +1,179 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 
 import './cartridge.dart';
 import './game.dart';
 
 class BallGameController extends FlameWatchGameController {
 
+  Random random = Random();
+
   BallGameController(FlameWatchGameCartridge c): super(c);
+
+  // to get a 80% call with 0.8
+  bool rollChance(double possibility) => random.nextDouble() <= possibility;
+  int rollLane() => random.nextInt(3) + 1;
 
   int pos = 1;
 
+  bool newFalling = false;
+
+  bool firstLane1 = false;
+  bool firstLane2 = false;
+  bool firstLane3 = false;
+  int firstLaneDrowing = -1;
+
+  bool secondLane1 = false;
+  bool secondLane2 = false;
+  bool secondLane3 = false;
+  int secondLaneDrowing = -1;
+
+  bool thirdLane1 = false;
+  bool thirdLane2 = false;
+  bool thirdLane3 = false;
+  int thirdLaneDrowing = -1;
+
   void onLeft() {
     if (pos - 1 >= 1) {
-      findSprite('boat$pos').active = false;
       pos--;
-      findSprite('boat$pos').active = true;
+      boatBlock();
     }
   }
 
   void onRight() {
     if (pos + 1 <= 3) {
-      findSprite('boat$pos').active = false;
       pos++;
-      findSprite('boat$pos').active = true;
+      boatBlock();
     }
   }
 
   void onTick() {
+    propellerBlock();
+    updateLanesBlock();
+    drowingBlock();
+  }
+
+  void propellerBlock() {
     findSprite('big-chopper-propeller').toggle();
     findSprite('small-chopper-propeller').toggle();
+  }
+
+  void boatBlock() {
+    findSprite('boat1').active = pos == 1;
+    findSprite('boat2').active = pos == 2;
+    findSprite('boat3').active = pos == 3;
+  }
+
+  void drowingBlock() {
+    findSprite('drowing-1-1').active = firstLaneDrowing == 1;
+    findSprite('drowing-1-2').active = firstLaneDrowing == 2;
+
+    findSprite('drowing-2-1').active = secondLaneDrowing == 1;
+    findSprite('drowing-2-2').active = secondLaneDrowing == 2;
+
+    findSprite('drowing-3-1').active = thirdLaneDrowing == 1;
+    findSprite('drowing-3-2').active = thirdLaneDrowing == 2;
+
+    if (firstLaneDrowing == 1) {
+      firstLaneDrowing = 2;
+    } else if (firstLaneDrowing == 2) {
+      firstLaneDrowing = -1;
+    }
+
+    if (secondLaneDrowing == 1) {
+      secondLaneDrowing = 2;
+    } else if (secondLaneDrowing == 2) {
+      secondLaneDrowing = -1;
+    }
+
+    if (thirdLaneDrowing == 1) {
+      thirdLaneDrowing = 2;
+    } else if (thirdLaneDrowing == 2) {
+      thirdLaneDrowing = -1;
+    }
+
+  }
+
+  void updateLanesBlock() {
+    if (firstLane3) {
+      firstLane3 = false;
+      if (pos == 1) {
+        // TODO success
+      } else {
+        firstLaneDrowing = 1;
+      }
+    }
+    if (firstLane2) {
+      firstLane2 = false;
+      firstLane3 = true;
+    }
+    if (firstLane1) {
+      firstLane1 = false;
+      firstLane2 = true;
+    }
+
+    if (secondLane3) {
+      secondLane3 = false;
+      if (pos == 2) {
+        // TODO success
+      } else {
+        secondLaneDrowing = 1;
+      }
+    }
+    if (secondLane2) {
+      secondLane2 = false;
+      secondLane3 = true;
+    }
+    if (secondLane1) {
+      secondLane1 = false;
+      secondLane2 = true;
+    }
+
+    if (thirdLane3) {
+      thirdLane3 = false;
+      if (pos == 3) {
+        // TODO success
+      } else {
+        thirdLaneDrowing = 1;
+      }
+    }
+    if (thirdLane2) {
+      thirdLane2 = false;
+      thirdLane3 = true;
+    }
+    if (thirdLane1) {
+      thirdLane1 = false;
+      thirdLane2 = true;
+    }
+
+    // If there is already a new fall, we need to choose to which lane it will be
+    if (newFalling) {
+      final newLane = rollLane();
+      if (newLane == 1)
+        firstLane1 = true;
+      if (newLane == 2)
+        secondLane1 = true;
+      if (newLane == 3)
+        thirdLane1 = true;
+
+      newFalling = false;
+    } else if(rollChance(0.25)) {
+      newFalling = true;
+    }
+
+    findSprite('falling-start').active = newFalling;
+
+    findSprite('falling-1-1').active = firstLane1;
+    findSprite('falling-1-2').active = firstLane2;
+    findSprite('falling-1-3').active = firstLane3;
+
+    findSprite('falling-2-1').active = secondLane1;
+    findSprite('falling-2-2').active = secondLane2;
+    findSprite('falling-2-3').active = secondLane3;
+
+    findSprite('falling-3-1').active = thirdLane1;
+    findSprite('falling-3-2').active = thirdLane2;
+    findSprite('falling-3-3').active = thirdLane3;
   }
 }
 
@@ -42,50 +188,49 @@ Future<FlameWatchGame> loadSampleGame(Size size) async {
         'boat1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAMCAYAAAB4MH11AAAAVUlEQVQ4jWNkgID/DKiAkYFKgBGL4VS1hIkahgxvC2DhTLNIRga4IpsigB5E/9FoqlsAMxxf8iUF/IcT+BRQYPh/QhntPxY2KYARVyqihiWMDAwMDACr+hMHQNzxaQAAAABJRU5ErkJggg==',
         'boat2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAPCAYAAAD+pA/bAAAAXUlEQVQ4jd2TwQoAIAhDtf//ZztEYaFiuC69q7DBNpkGQjtMINgQh5o0hMjfBjPnZyVrvLJLnBFZJiVjHcWLuYonLIHhjbhYj6aLjx4xA58rgop7B0Q8i8yK4EBNOi6DFwS0AzCLAAAAAElFTkSuQmCC',
         'boat3': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB0AAAAMCAYAAACeGbYxAAAAXUlEQVQ4je2SwQ7AIAhDX5f9/y+zqyHiZOBt72KMpCW1IsbcXYvZFJGQN2w1vjpEftOI1R8dK9IbUaFK7MRrw9myhJyQj3D2ZpO5DDYK7VIyBLg/ilZiVqa9HQjgAWIgDw41B4qcAAAAAElFTkSuQmCC',
+        'falling-start': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAFCAYAAACNbyblAAAAG0lEQVQImWNgQID/UMzAhCSAFfxHV4ChEkMFAJuEB/vDNNWaAAAAAElFTkSuQmCC',
+        'falling-1-1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAKCAYAAABi8KSDAAAANklEQVQYlWNgIAEwovH/4xNnxKIQ3SC4AfgUY2jE5QyszmQi0mScAK+m/0gKiDadKIXIJuMFAE0sDf4TlE4JAAAAAElFTkSuQmCC',
+        'falling-1-2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAAc0lEQVQ4ja1SQQ7AIAir+/+fu5OGQQFJ1osKrQVlIYIitsImIQbRFnTkI1oDMgDgUbZVzAta/F6SKhEULpkrq6QkdzeWeZqV7nzgmyrnCPi+0lUv44/bAnprU07qTLEP5K7p4HozraWgxVhg4YdwNPap6AVt8R4IdORAkAAAAABJRU5ErkJggg==',
+        'falling-1-3': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAcCAYAAAC+lOV/AAAAhElEQVQ4jcVU0RKAIAzC/v+f6am7QjaX5rWnnMCE0xp8Mei3cJGQLOcogIcqlYkdt00SAfhjaw5hf8nzcmDbPdscdPIdRNOD7s8cm7qoiKQ4CojSe5TzU3pRQJ/2K///3bA7mcgfxdAS5TtM+lLMBDLc94FFvvdPXioNrHzrHHD6T5MKnGZ6Ig/bw8FdAAAAAElFTkSuQmCC',
+        'falling-2-1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAOCAYAAADnqNYmAAAAN0lEQVQYlWNgQID/MAYjugADAwMjE5okAwMDAwMTAwFAnJkoAJtKFAE4jdVMrLbjdSe6uRic/wB4Ww4DhV4pCgAAAABJRU5ErkJggg==',
+        'falling-2-2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAXCAYAAADduLXGAAAAZklEQVQ4jb2SQQ4AIQgD2/3/n/FmoICuHiQxUjMKJRI5zOVEIzykQQ+vwHmBP0EAwFeV67TC6z6etMHNDhy0YSnZgXpgbgVQDVUVJnM052vYUM+5Na+mAqgvKXD/kd7DlZcUOqagB2PZFxfWYgf8AAAAAElFTkSuQmCC',
+        'falling-2-3': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA0AAAAYCAYAAAAh8HdUAAAAcUlEQVQ4jc1SWw7AIAyC3f/O3ddM7WA+4sdIjLVCqK2ERqSY9ZKG6MAsmhE0IRcFAIDLlfBxlqIhjpRHUY7KAcbN5lbeFMox0p7Xy7UqXVM63lbLt+f0YDSvxt1yqqgdlBWoSVfSmQ/7c5FCmHhKYHM30fMaEjk3uV4AAAAASUVORK5CYII=',
+        'falling-3-1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAICAYAAAAvOAWIAAAANElEQVQYlWNgYGD4D8XoAEOcEUkCGx9FHSOSADbTcSrGpQmuhgmPacTYSJoibBpwhRhuGwAaZQ38lW/CgQAAAABJRU5ErkJggg==',
+        'falling-3-2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAAcUlEQVQ4jaVSSRLAMAjC/v/P9tRMXXCZcNNA3BBYKCKEBRk5cD9BRz4iWZABAE9Wtsp5QYvrlkILSUwr+Lz+c9O2lAaDiiapsC0ccrb30k/TO5xP1ofzAgW3B11KGBTN0J5seJMZ7ty6FjD4gUvblI8vumIeCBPVh5EAAAAASUVORK5CYII=',
+        'falling-3-3': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAAcUlEQVQ4jaVSSRLAMAjC/v/P9tRMXXCZcNNA3BBYKCKEBRk5cD9BRz4iWZABAE9Wtsp5QYvrlkILSUwr+Lz+c9O2lAaDiiapsC0ccrb30k/TO5xP1ofzAgW3B11KGBTN0J5seJMZ7ty6FjD4gUvblI8vumIeCBPVh5EAAAAASUVORK5CYII=',
+        'drowing-1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAKCAYAAACwoK7bAAAAXUlEQVQoka1RQQ7AIAyi+/+f683YDjq2jJMRRGgDHHmcQ2hGXIZpEs0jPqURKIGCXPYPJ+7UlHa9an+kxjA1TbTErqljvpf356yLMeDNUnG3dkrgLo/pRyRL8YLHAjieFgiKBf6lAAAAAElFTkSuQmCC',
+        'drowing-2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAECAYAAACzzX7wAAAAHUlEQVQImWNkQID/DKiAEU5gkYQrYsQjiTAGnxUAJ2cEBI7UGsEAAAAASUVORK5CYII=',
       },
       gameSprites: [
-        GameSprite(
-            id: 'chopper',
-            x: 90,
-            y: 1,
-            spriteName: 'chopper',
-            active: true,
-        ),
-        GameSprite(
-            id: 'big-chopper-propeller',
-            x: 88,
-            y: 1,
-            spriteName: 'big-propeller',
-            active: true,
-        ),
-        GameSprite(
-            id: 'small-chopper-propeller',
-            x: 105,
-            y: 2,
-            spriteName: 'small-propeller',
-            active: false,
-        ),
-        GameSprite(
-            id: 'boat1',
-            x: 18,
-            y: 65,
-            spriteName: 'boat1',
-            active: true,
-        ),
-        GameSprite(
-            id: 'boat2',
-            x: 50,
-            y: 65,
-            spriteName: 'boat2',
-            active: false,
-        ),
-        GameSprite(
-            id: 'boat3',
-            x: 77,
-            y: 65,
-            spriteName: 'boat3',
-            active: false,
-        ),
+        GameSprite( id: 'chopper', x: 90, y: 1, spriteName: 'chopper', active: true),
+        GameSprite( id: 'big-chopper-propeller', x: 88, y: 1, spriteName: 'big-propeller', active: true),
+        GameSprite( id: 'small-chopper-propeller', x: 105, y: 2, spriteName: 'small-propeller', active: false),
+        GameSprite( id: 'boat1', x: 18, y: 65, spriteName: 'boat1', active: true),
+        GameSprite( id: 'boat2', x: 50, y: 65, spriteName: 'boat2', active: false),
+        GameSprite( id: 'boat3', x: 77, y: 65, spriteName: 'boat3', active: false),
+
+        GameSprite( id: 'falling-start', x: 82, y: 8, spriteName: 'falling-start', active: false),
+
+        GameSprite( id: 'falling-1-1', x: 63, y: 12, spriteName: 'falling-1-1', active: false),
+        GameSprite( id: 'falling-1-2', x: 46, y: 20, spriteName: 'falling-1-2', active: false),
+        GameSprite( id: 'falling-1-3', x: 27, y: 47, spriteName: 'falling-1-3', active: false),
+
+        GameSprite( id: 'falling-2-1', x: 72, y: 15, spriteName: 'falling-2-1', active: false),
+        GameSprite( id: 'falling-2-2', x: 63, y: 27, spriteName: 'falling-2-2', active: false),
+        GameSprite( id: 'falling-2-3', x: 59, y: 51, spriteName: 'falling-2-3', active: false),
+
+        GameSprite( id: 'falling-3-1', x: 79, y: 16, spriteName: 'falling-3-1', active: false),
+        GameSprite( id: 'falling-3-2', x: 82, y: 25, spriteName: 'falling-3-2', active: false),
+        GameSprite( id: 'falling-3-3', x: 90, y: 47, spriteName: 'falling-3-3', active: false),
+
+        GameSprite( id: 'drowing-1-1', x: 17, y: 78, spriteName: 'drowing-1', active: false),
+        GameSprite( id: 'drowing-1-2', x: 23, y: 90, spriteName: 'drowing-2', active: false),
+
+        GameSprite( id: 'drowing-2-1', x: 56, y: 78, spriteName: 'drowing-1', active: false),
+        GameSprite( id: 'drowing-2-2', x: 62, y: 90, spriteName: 'drowing-2', active: false),
+
+        GameSprite( id: 'drowing-3-1', x: 88, y: 78, spriteName: 'drowing-1', active: false),
+        GameSprite( id: 'drowing-3-2', x: 94, y: 90, spriteName: 'drowing-2', active: false),
       ]
   );
 
