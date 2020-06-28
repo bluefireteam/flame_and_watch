@@ -7,6 +7,7 @@ import 'package:flame_and_watch/widgets/swtich_button.dart';
 
 import '../../game/game.dart';
 import '../../game/parachute_game.dart';
+import '../../game/clock_game.dart';
 
 class Console extends StatefulWidget {
   @override
@@ -86,7 +87,7 @@ class _ConsoleState extends State<Console> {
                 final size = Size(constraints.maxWidth, constraints.maxHeight);
 
                 return FutureBuilder<FlameWatchGame>(
-                  future: loadParachuteGame(size),
+                  future: loadClockGame(size),
                   builder: (_, snapshot) {
                     _game = snapshot.data;
                     if (snapshot.hasData) {
