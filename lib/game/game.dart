@@ -31,10 +31,6 @@ class FlameWatchGame extends Game with KeyboardEvents {
 
   Rect _screenRect;
 
-  FlameWatchGame() {
-    _ticker = Timer(0.5, repeat: true, callback: _tick)..start();
-  }
-
   static Future<FlameWatchGame> load(
     Size gameSize,
     FlameWatchGameCartridge gameCartridge,
@@ -70,6 +66,7 @@ class FlameWatchGame extends Game with KeyboardEvents {
 
     game._gameScale = scaleRaw - scaleRaw % 0.02;
     game._offset = (gameSize.width - GAME_RESOLUTION.width * game._gameScale) / 2;
+    game._ticker = Timer(gameCartridge.tickTime, repeat: true, callback: game._tick)..start();
 
     return game;
   }

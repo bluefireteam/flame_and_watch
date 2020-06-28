@@ -71,6 +71,7 @@ abstract class FlameWatchGameController {
 class FlameWatchGameCartridge {
   String gameName;
   String background;
+  double tickTime;
   Map<String, String> sprites;
   Map<String, GameDigitalDisplay> digitalDisplays = {};
 
@@ -82,5 +83,6 @@ class FlameWatchGameCartridge {
     @required this.sprites,
     @required this.gameSprites,
     @required this.digitalDisplays,
+    this.tickTime = 0.5,
   });
 }
