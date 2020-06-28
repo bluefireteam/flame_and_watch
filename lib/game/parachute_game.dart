@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flame/position.dart';
 import 'dart:math';
 
 import './cartridge.dart';
 import './game.dart';
 
-class BallGameController extends FlameWatchGameController {
+class ParachuteGameController extends FlameWatchGameController {
 
   Random random = Random();
 
-  BallGameController(FlameWatchGameCartridge c): super(c) {
-    counterText = "0";
+  ParachuteGameController(FlameWatchGameCartridge c): super(c) {
+    setDisplayText('score', '0');
   }
 
   // to get a 80% call with 0.8
@@ -109,14 +110,14 @@ class BallGameController extends FlameWatchGameController {
       difficult = min(1.0, difficult + 0.1);
     }
 
-    counterText = '$score';
+    setDisplayText('score', '$score');
   }
 
   void resetScoreBlock() {
     score = 0;
     difficultProgression = 0;
     difficult = 0.1;
-    counterText = '$score';
+    setDisplayText('score', '$score');
   }
 
   void missBlock() {
@@ -218,7 +219,7 @@ class BallGameController extends FlameWatchGameController {
   }
 }
 
-Future<FlameWatchGame> loadSampleGame(Size size) async {
+Future<FlameWatchGame> loadParachuteGame(Size size) async {
   final cartridge = FlameWatchGameCartridge(
       gameName: 'ball example',
       background: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAIAAAABgCAYAAADVenpJAAAEHUlEQVR4nO2cPZLjIBCF0ZZPso4mceRwDrBVjuYEzp35JJtt7hNM5BtMuJGTieRkD6KNUGHUQIMA8fO+qqkay0jIvEfT9MgjBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALrjcD5NttemY6BcBvmLSbjH7T7o73OOydcUel+2tiAtCyFVVGE4M/txuw+UKahrQPQyGDjiCxEvtFPRg9MepME4w9XZ7BsJTOgRYs111l6jBw7n0+QaK3I2mgSPZYRQIDwfTi4mBMMAIe+nAOLz8cm1BluYcAmb0wi9GoA7k/X23HPYWzUTMEF6Yu3SqPODZr7tRqjzuckf5wO1aoJcOZU+fovBDL0RUyFIXWJcxSTqBrltaiVnMk2N22Lmytnqs2XTZy4VEWyVwt4KRFuWy50RQIVT1eMIppvClHj6JjwtkntH5TXQH+9v8819fn1bdxChpLhmjaQ2ghzjH66GH+9vk/yRxz6/vpMJBPH9xA8dL9mH9WRVdElK8QF/BxWyBaQSc6OYlPhCwAApUXMg1+5JP0fF56+w5BIA8fOjJ8BUaOeEe9lGXbZt13w5YBJeCIifEtfuh1uu19tw8raBaqwD8cvFZR6pq9EANuFtJ4JyWGMC5zYQtI3VAJj9dcB9zI6K9kYDQPy6eNzug6lmYNMSS0BjuLaKehQgDYDZ3w+IAJ2zMABmf3voYV99zYoAh/Npwnf+2mSnvpCzv+VHsMArLwaA8O3hqvTOBhj3P+eDPT+d2xs7IV7FFwKi14yu3aj8vh+fi/b4smYDrNEwigFUYIa8rNUvugEkMEJ6YmiXrBKIukF6YkyypKVgmCA9a02QbAkQAsvAVvhomiwCQPw6MEaA/fhc1AdsQPCy4EaBnX5ALRZwTQDxy4Mq+lBaOp8KNp0M0cuH0lbXkW0AFTwzUA82E+zHJ54Iah1qsu7H57xE7EyN8P3APvBeAmCAOjF9T3CxCwDt4/1MoASzvz2QBHYOloAOWeQAptCe6x9Dgbyouu70A6A9bPoiB+gc5ACN4/pXfywDYP1vC9UUZCXw3+EX60J///yGMSrAlgMMx8t1dQIII5SFj6ZRDCCBEfKzVj92EsgRV7+ZkHNC+u2BmBNVZR5cqoOUg4/Iw+d4uU6xP6Mc/00GLpb4rQufA3IAbQLFGvQQE0Dw+AxCbCcGt18In47VuwCuOLZ1zHQPJQkfkuDWQNRtIIcaB64Gg4aSzQA1DhZnbNZ8LvX6+nVs74X2QUF26huqKXIKHlOoXPlQanNx+6huVqrkXr44uETLkfh6lYJDO9maEsWXrIk2uYSXVGsAnRyGoMSJkSC6ll7u+SE0YwCKLcrNsZI3bh8qan/cz960ASS5ah2l4VpijpfrVOUHCwGlZ5oka1rJ4M/Pr3gXgnoboNb5D65JAVh+6/ZFAAAAAElFTkSuQmCC',
@@ -279,11 +280,14 @@ Future<FlameWatchGame> loadSampleGame(Size size) async {
         GameSprite(id: 'miss-marker-1', x: 122, y: 91, spriteName: 'miss-marker', active: false),
         GameSprite(id: 'miss-marker-2', x: 116, y: 91, spriteName: 'miss-marker', active: false),
         GameSprite(id: 'miss-marker-3', x: 110, y: 91, spriteName: 'miss-marker', active: false),
-      ]
+      ],
+       digitalDisplays: {
+         'score': GameDigitalDisplay(position: Position(5, 5)),
+       },
   );
 
   final game = await FlameWatchGame.load(
-      size, cartridge, BallGameController(cartridge),
+      size, cartridge, ParachuteGameController(cartridge),
   );
 
   return game;

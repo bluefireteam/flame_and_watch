@@ -1,4 +1,21 @@
 import 'package:meta/meta.dart';
+import 'package:flame/position.dart';
+
+enum GameDigitalDisplaySize {
+  SMALL, MEDIUM, BIG,
+}
+
+class GameDigitalDisplay {
+  final Position position;
+  String text;
+  final GameDigitalDisplaySize size;
+
+  GameDigitalDisplay({
+      @required this.position,
+      this.text = '',
+      this.size = GameDigitalDisplaySize.SMALL,
+  });
+}
 
 class GameSprite {
   double x;
@@ -26,13 +43,15 @@ abstract class FlameWatchGameController {
 
   FlameWatchGameController(this.cartridge);
 
-  String counterText;
-
   GameSprite findSprite(String id) {
     return cartridge.gameSprites.firstWhere(
         (s) => s.id == id,
         orElse: () => null,
     );
+  }
+
+  void setDisplayText(String id, String text) {
+    cartridge.digitalDisplays[id].text = text;
   }
 
   void onLeft();
@@ -44,6 +63,7 @@ class FlameWatchGameCartridge {
   String gameName;
   String background;
   Map<String, String> sprites;
+  Map<String, GameDigitalDisplay> digitalDisplays = {};
 
   List<GameSprite> gameSprites = [];
 
@@ -52,5 +72,6 @@ class FlameWatchGameCartridge {
     @required this.gameName,
     @required this.sprites,
     @required this.gameSprites,
+    @required this.digitalDisplays,
   });
 }

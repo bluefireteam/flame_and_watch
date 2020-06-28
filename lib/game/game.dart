@@ -127,12 +127,23 @@ class _GameLayer extends DynamicLayer {
   FlameWatchGameCartridge cartridge;
   FlameWatchGameController controller;
 
-  final TextConfig _counterTextConfig = TextConfig(
+  final TextConfig _smallDigitalFont = TextConfig(
       fontSize: 14,
       color: const Color(0xFF000000),
       fontFamily: 'Crystal',
   );
-  final _counterTextPosition = Position(5, 5);
+
+  final TextConfig _mediumDigitalFont = TextConfig(
+      fontSize: 18,
+      color: const Color(0xFF000000),
+      fontFamily: 'Crystal',
+  );
+
+  final TextConfig _bigDigitalFont = TextConfig(
+      fontSize: 22,
+      color: const Color(0xFF000000),
+      fontFamily: 'Crystal',
+  );
 
   _GameLayer(this.sprites, this.cartridge, this.controller) {
     preProcessors.add(
@@ -145,11 +156,19 @@ class _GameLayer extends DynamicLayer {
 
   @override
   void drawLayer() {
-    _counterTextConfig.render(
-        canvas,
-        controller.counterText,
-        _counterTextPosition,
-    );
+    cartridge.digitalDisplays.values.forEach((display) {
+      final textConfig = display.size == GameDigitalDisplaySize.SMALL
+          ? _smallDigitalFont
+          : display.size == GameDigitalDisplaySize.MEDIUM
+            ? _mediumDigitalFont
+            : _bigDigitalFont;
+
+      textConfig.render(
+          canvas,
+          display.text,
+          display.position,
+      );
+    });
 
     cartridge.gameSprites.forEach((gameSprite) {
       if (gameSprite.active) {
