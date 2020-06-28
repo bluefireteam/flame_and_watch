@@ -1,3 +1,4 @@
+import 'package:flame_and_watch/widgets/option_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flame_and_watch/widgets/console/screen_console.dart';
 import 'package:flame_and_watch/widgets/console/side_console.dart';
@@ -48,24 +49,15 @@ class _ConsoleState extends State<Console> {
                     children: [
                       Text(
                         'FLAME',
-                        style: TextStyle(
-                            fontFamily: 'Firealistic',
-                            fontSize: 20,
-                            color: Color(0xff8a3842)),
+                        style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
                       ),
                       Text(
                         '&',
-                        style: TextStyle(
-                            fontFamily: 'Firealistic',
-                            fontSize: 20,
-                            color: Color(0xff8a3842)),
+                        style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
                       ),
                       Text(
                         'WATCH',
-                        style: TextStyle(
-                            fontFamily: 'Firealistic',
-                            fontSize: 20,
-                            color: Color(0xff8a3842)),
+                        style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
                       ),
                     ],
                   ),
@@ -104,20 +96,41 @@ class _ConsoleState extends State<Console> {
             ),
           ),
           SideConsole(
-              buttonClick: () {
-                _game?.onRight();
-              },
-              buttonLabel: 'RIGHT >',
-              topContentBox: Container(
-                padding: EdgeInsets.only(top: 5),
-                child: SwitchButton(
-                  on: SettingsManager.isSoundOn(),
-                  onChange: () {
-                    SettingsManager.switchSound();
-                  },
-                  label: 'Sound',
+            buttonClick: () {
+              _game?.onRight();
+            },
+            buttonLabel: 'RIGHT >',
+            topContentBox: Column(
+              children: [
+                Container(
+                  padding: EdgeInsets.only(top: 5),
+                  child: SwitchButton(
+                    on: SettingsManager.isSoundOn(),
+                    onChange: () {
+                      SettingsManager.switchSound();
+                    },
+                    label: 'Sound',
+                  ),
                 ),
-              )),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20),
+                  child: OptionButton(
+                    onClick: () {},
+                    label: 'Game',
+                    size: 35,
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, top: 15),
+                  child: OptionButton(
+                    onClick: () {},
+                    label: 'Time',
+                    size: 35,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
