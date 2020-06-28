@@ -111,6 +111,7 @@ class ParachuteGameController extends FlameWatchGameController {
     }
 
     setDisplayText('score', '$score');
+    sfx('rescue.wav');
   }
 
   void resetScoreBlock() {
@@ -118,6 +119,7 @@ class ParachuteGameController extends FlameWatchGameController {
     difficultProgression = 0;
     difficult = 0.1;
     setDisplayText('score', '$score');
+    sfx('gameover.wav');
   }
 
   void missBlock() {
@@ -131,6 +133,7 @@ class ParachuteGameController extends FlameWatchGameController {
     findSprite('miss-marker-1').active = miss >= 1;
     findSprite('miss-marker-2').active = miss >= 2;
     findSprite('miss-marker-3').active = miss >= 3;
+    sfx('drown.wav');
   }
 
   void updateLanesBlock() {
