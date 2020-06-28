@@ -15,14 +15,14 @@ class _ConsoleState extends State<Console> {
   @override
   Widget build(_) {
     return Container(
-      padding: EdgeInsets.only(top: 25, bottom: 25, left: 10, right: 10),
+      padding: EdgeInsets.only(top: 25, bottom: 25),
       decoration: BoxDecoration(
         color: Color(0xffc6cacb),
         border: Border(
           top: BorderSide(width: 15, color: Color(0xFF8a3842)),
           left: BorderSide(width: 15, color: Color(0xFF7b323b)),
           right: BorderSide(width: 15, color: Color(0xFF6e2d35)),
-          bottom: BorderSide(width: 15, color: Color(0xff662a31)),
+          bottom: BorderSide(width: 10, color: Color(0xff662a31)),
         ),
       ),
       child: Row(
@@ -31,27 +31,46 @@ class _ConsoleState extends State<Console> {
             flex: 2,
             child: Container(
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  GameButton(
-                    size: 80,
-                    onClick: () {
-                      _game?.onLeft();
-                    },
+                  Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                      color: Color(0xffd5dadb),
+                      borderRadius: BorderRadius.circular(10),
+                      border: Border.all(),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          'FLAME',
+                          style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                        ),
+                        Text(
+                          '&',
+                          style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                        ),
+                        Text(
+                          'WATCH',
+                          style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Column(
                     children: [
-                      Icon(
-                        Icons.arrow_left,
-                        size: 40,
+                      GameButton(
+                        size: 80,
+                        onClick: () {
+                          _game?.onLeft();
+                        },
+                      ),
+                      SizedBox(
+                        height: 10,
                       ),
                       Text(
-                        'LEFT',
+                        '< LEFT',
                         style: TextStyle(
                           fontFamily: 'Liberation Sans',
                           fontSize: 20,
@@ -66,7 +85,7 @@ class _ConsoleState extends State<Console> {
           Expanded(
             flex: 6,
             child: Container(
-              padding: EdgeInsets.all(15),
+              padding: EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Color(0xffc6cacb),
                 border: Border(
@@ -77,6 +96,15 @@ class _ConsoleState extends State<Console> {
                 ),
               ),
               child: Container(
+                padding: EdgeInsets.only(right: 8, left: 8, top: 10, bottom: 10),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
+                  border: Border.all(
+                    color: Colors.black,
+                    width: 2,
+                  ),
+                ),
+                child: Container(
                   decoration: BoxDecoration(
                     color: Color(0xffc6cacb),
                     borderRadius: BorderRadius.circular(15),
@@ -85,10 +113,11 @@ class _ConsoleState extends State<Console> {
                       width: 12,
                     ),
                   ),
-                  child: LayoutBuilder(builder: (ctx, constraints) {
-                    final size = Size(constraints.maxWidth, constraints.maxHeight);
+                  child: LayoutBuilder(
+                    builder: (ctx, constraints) {
+                      final size = Size(constraints.maxWidth, constraints.maxHeight);
 
-                    return FutureBuilder<FlameWatchGame>(
+                      return FutureBuilder<FlameWatchGame>(
                         future: loadSampleGame(size),
                         builder: (_, snapshot) {
                           _game = snapshot.data;
@@ -97,8 +126,12 @@ class _ConsoleState extends State<Console> {
                           }
 
                           return Container();
-                        });
-                  })),
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
             ),
           ),
           Expanded(
@@ -117,21 +150,14 @@ class _ConsoleState extends State<Console> {
                   SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text(
-                        'RIGHT',
-                        style: TextStyle(
-                          fontFamily: 'Liberation Sans',
-                          fontSize: 20,
-                        ),
+                  Container(
+                    child: Text(
+                      'RIGHT >',
+                      style: TextStyle(
+                        fontFamily: 'Liberation Sans',
+                        fontSize: 20,
                       ),
-                      Icon(
-                        Icons.arrow_right,
-                        size: 40,
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),

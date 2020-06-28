@@ -28,5 +28,5 @@ flutter:
         - asset: assets/fonts/LiberationSans-Regular.ttf
     - family: Firealistic
       fonts:
-        - asset: assets/fonts/firealistic-regular.ttf
+        - asset: assets/fonts/firealistic-regular.otf
         
