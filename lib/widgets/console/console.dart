@@ -35,7 +35,11 @@ class _ConsoleState extends State<Console> {
             buttonClick: () {
               _game?.onLeft();
             },
-            buttonLabel: '< LEFT',
+            iconLabelLeft: Icon(
+              Icons.arrow_left,
+              size: 40,
+            ),
+            buttonLabel: 'LEFT',
             topContentBox: Column(
               children: [
                 Container(
@@ -99,7 +103,11 @@ class _ConsoleState extends State<Console> {
             buttonClick: () {
               _game?.onRight();
             },
-            buttonLabel: 'RIGHT >',
+            iconLabelRight: Icon(
+              Icons.arrow_right,
+              size: 40,
+            ),
+            buttonLabel: 'RIGHT',
             topContentBox: Column(
               children: [
                 Container(
