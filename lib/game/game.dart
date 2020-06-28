@@ -1,9 +1,13 @@
+import 'dart:html';
+
 import 'package:flame/game.dart';
 import 'package:flame/flame.dart';
+import 'package:flame/keyboard.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/position.dart';
 import 'package:flame/time.dart';
 import 'package:flame/text_config.dart';
+import 'package:flutter/services.dart';
 
 import 'dart:ui';
 import 'dart:math';
@@ -12,7 +16,7 @@ import './cartridge.dart';
 import './layer.dart';
 import './processors.dart';
 
-class FlameWatchGame extends Game {
+class FlameWatchGame extends Game with KeyboardEvents {
   static Paint _backgroundPaint = Paint()..color = const Color(0xFF8D9E8C);
   static const GAME_RESOLUTION = const Size(128, 96);
   static Rect gameRect = Rect.fromLTWH(0, 0, GAME_RESOLUTION.width, GAME_RESOLUTION.height);
@@ -50,9 +54,9 @@ class FlameWatchGame extends Game {
     await Future.wait(spriteLoading);
 
     game._gameLayer = _GameLayer(
-        game._loadedSprites,
-        gameCartridge,
-        controller,
+      game._loadedSprites,
+      gameCartridge,
+      controller,
     );
 
     final _backgroundImage = await Flame.images.fromBase64(
@@ -70,6 +74,19 @@ class FlameWatchGame extends Game {
     game._offset = (gameSize.width - GAME_RESOLUTION.width * game._gameScale) / 2;
 
     return game;
+  }
+
+  @override
+  void onKeyEvent(event) {
+    if (event is RawKeyUpEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+        onLeft();
+        return;
+      } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+        onRight();
+        return;
+      }
+    }
   }
 
   @override
@@ -128,21 +145,21 @@ class _GameLayer extends DynamicLayer {
   FlameWatchGameController controller;
 
   final TextConfig _smallDigitalFont = TextConfig(
-      fontSize: 14,
-      color: const Color(0xFF000000),
-      fontFamily: 'Crystal',
+    fontSize: 14,
+    color: const Color(0xFF000000),
+    fontFamily: 'Crystal',
   );
 
   final TextConfig _mediumDigitalFont = TextConfig(
-      fontSize: 18,
-      color: const Color(0xFF000000),
-      fontFamily: 'Crystal',
+    fontSize: 18,
+    color: const Color(0xFF000000),
+    fontFamily: 'Crystal',
   );
 
   final TextConfig _bigDigitalFont = TextConfig(
-      fontSize: 22,
-      color: const Color(0xFF000000),
-      fontFamily: 'Crystal',
+    fontSize: 22,
+    color: const Color(0xFF000000),
+    fontFamily: 'Crystal',
   );
 
   _GameLayer(this.sprites, this.cartridge, this.controller) {
@@ -159,14 +176,12 @@ class _GameLayer extends DynamicLayer {
     cartridge.digitalDisplays.values.forEach((display) {
       final textConfig = display.size == GameDigitalDisplaySize.SMALL
           ? _smallDigitalFont
-          : display.size == GameDigitalDisplaySize.MEDIUM
-            ? _mediumDigitalFont
-            : _bigDigitalFont;
+          : display.size == GameDigitalDisplaySize.MEDIUM ? _mediumDigitalFont : _bigDigitalFont;
 
       textConfig.render(
-          canvas,
-          display.text,
-          display.position,
+        canvas,
+        display.text,
+        display.position,
       );
     });
 
