@@ -33,7 +33,7 @@ class _ConsoleState extends State<Console> {
               _game?.onLeft();
             },
             buttonLabel: '< LEFT',
-            topContent: Column(
+            topContentBox: Column(
               children: [
                 Text(
                   'FLAME',

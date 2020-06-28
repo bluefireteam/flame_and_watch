@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 class SideConsole extends StatelessWidget {
   final Function buttonClick;
   final String buttonLabel;
-  final Widget topContent;
+  final Widget topContentBox;
 
-  SideConsole({this.buttonClick, this.buttonLabel, this.topContent});
+  SideConsole({this.buttonClick, this.buttonLabel, this.topContentBox});
 
   @override
   Widget build(_) {
@@ -17,15 +17,30 @@ class SideConsole extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            topContent != null
-                ? Container(
-                    width: 100,
-                    decoration: BoxDecoration(
-                      color: Color(0xffd5dadb),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(),
-                    ),
-                    child: topContent,
+            topContentBox != null
+                ? Column(
+                    children: [
+                      Container(
+                        width: 100,
+                        decoration: BoxDecoration(
+                          color: Color(0xffd5dadb),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(),
+                        ),
+                        child: topContentBox,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(top: 2),
+                        child: Text(
+                          'Fireslime',
+                          style: TextStyle(
+                            fontFamily: 'Firealistic',
+                            fontSize: 14,
+                            color: Color(0xff6c6e70),
+                          ),
+                        ),
+                      ),
+                    ],
                   )
                 : Container(),
             Column(
