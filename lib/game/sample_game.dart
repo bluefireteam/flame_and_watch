@@ -8,13 +8,20 @@ class BallGameController extends FlameWatchGameController {
 
   Random random = Random();
 
-  BallGameController(FlameWatchGameCartridge c): super(c);
+  BallGameController(FlameWatchGameCartridge c): super(c) {
+    counterText = "0";
+  }
 
   // to get a 80% call with 0.8
   bool rollChance(double possibility) => random.nextDouble() <= possibility;
   int rollLane() => random.nextInt(3) + 1;
 
   int pos = 1;
+  int score = 0;
+  int miss = 0;
+
+  int difficultProgression = 0;
+  double difficult = 0.1;
 
   bool newFalling = false;
 
@@ -91,16 +98,48 @@ class BallGameController extends FlameWatchGameController {
     } else if (thirdLaneDrowing == 2) {
       thirdLaneDrowing = -1;
     }
+  }
 
+  void increaseScoreBlock() {
+    score++;
+    difficultProgression++;
+
+    if (difficultProgression == 10) {
+      difficultProgression = 0;
+      difficult = min(1.0, difficult + 0.1);
+    }
+
+    counterText = '$score';
+  }
+
+  void resetScoreBlock() {
+    score = 0;
+    difficultProgression = 0;
+    difficult = 0.1;
+    counterText = '$score';
+  }
+
+  void missBlock() {
+    miss++;
+
+    if (miss == 4) {
+      miss = 0;
+      resetScoreBlock();
+    }
+
+    findSprite('miss-marker-1').active = miss >= 1;
+    findSprite('miss-marker-2').active = miss >= 2;
+    findSprite('miss-marker-3').active = miss >= 3;
   }
 
   void updateLanesBlock() {
     if (firstLane3) {
       firstLane3 = false;
       if (pos == 1) {
-        // TODO success
+        increaseScoreBlock();
       } else {
         firstLaneDrowing = 1;
+        missBlock();
       }
     }
     if (firstLane2) {
@@ -115,9 +154,10 @@ class BallGameController extends FlameWatchGameController {
     if (secondLane3) {
       secondLane3 = false;
       if (pos == 2) {
-        // TODO success
+        increaseScoreBlock();
       } else {
         secondLaneDrowing = 1;
+        missBlock();
       }
     }
     if (secondLane2) {
@@ -132,9 +172,10 @@ class BallGameController extends FlameWatchGameController {
     if (thirdLane3) {
       thirdLane3 = false;
       if (pos == 3) {
-        // TODO success
+        increaseScoreBlock();
       } else {
         thirdLaneDrowing = 1;
+        missBlock();
       }
     }
     if (thirdLane2) {
@@ -157,7 +198,7 @@ class BallGameController extends FlameWatchGameController {
         thirdLane1 = true;
 
       newFalling = false;
-    } else if(rollChance(0.25)) {
+    } else if(rollChance(difficult)) {
       newFalling = true;
     }
 
@@ -200,37 +241,44 @@ Future<FlameWatchGame> loadSampleGame(Size size) async {
         'falling-3-3': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAwAAAAXCAYAAAA/ZK6/AAAAcUlEQVQ4jaVSSRLAMAjC/v/P9tRMXXCZcNNA3BBYKCKEBRk5cD9BRz4iWZABAE9Wtsp5QYvrlkILSUwr+Lz+c9O2lAaDiiapsC0ccrb30k/TO5xP1ofzAgW3B11KGBTN0J5seJMZ7ty6FjD4gUvblI8vumIeCBPVh5EAAAAASUVORK5CYII=',
         'drowing-1': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAKCAYAAACwoK7bAAAAXUlEQVQoka1RQQ7AIAyi+/+f683YDjq2jJMRRGgDHHmcQ2hGXIZpEs0jPqURKIGCXPYPJ+7UlHa9an+kxjA1TbTErqljvpf356yLMeDNUnG3dkrgLo/pRyRL8YLHAjieFgiKBf6lAAAAAElFTkSuQmCC',
         'drowing-2': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAECAYAAACzzX7wAAAAHUlEQVQImWNkQID/DKiAEU5gkYQrYsQjiTAGnxUAJ2cEBI7UGsEAAAAASUVORK5CYII=',
+        'miss-label': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAAGCAYAAADOic7aAAAANklEQVQYlWNgQID/DKjgPxbx/wT4GILYFBDi43QBLhcRNIwYr+Hks+ByHh6LGLHxGXE5j1QAABF+Gu29g39bAAAAAElFTkSuQmCC',
+        'miss-marker': 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAYAAAAFCAYAAABmWJ3mAAAAIElEQVQImWNgYGD4z4AK/mPjoCuCC8IlWNAkGXEZBQcAOkoH/j7JiCMAAAAASUVORK5CYII=',
       },
       gameSprites: [
-        GameSprite( id: 'chopper', x: 90, y: 1, spriteName: 'chopper', active: true),
-        GameSprite( id: 'big-chopper-propeller', x: 88, y: 1, spriteName: 'big-propeller', active: true),
-        GameSprite( id: 'small-chopper-propeller', x: 105, y: 2, spriteName: 'small-propeller', active: false),
-        GameSprite( id: 'boat1', x: 18, y: 65, spriteName: 'boat1', active: true),
-        GameSprite( id: 'boat2', x: 50, y: 65, spriteName: 'boat2', active: false),
-        GameSprite( id: 'boat3', x: 77, y: 65, spriteName: 'boat3', active: false),
+        GameSprite(id: 'chopper', x: 90, y: 1, spriteName: 'chopper', active: true),
+        GameSprite(id: 'big-chopper-propeller', x: 88, y: 1, spriteName: 'big-propeller', active: true),
+        GameSprite(id: 'small-chopper-propeller', x: 105, y: 2, spriteName: 'small-propeller', active: false),
+        GameSprite(id: 'boat1', x: 18, y: 65, spriteName: 'boat1', active: true),
+        GameSprite(id: 'boat2', x: 50, y: 65, spriteName: 'boat2', active: false),
+        GameSprite(id: 'boat3', x: 77, y: 65, spriteName: 'boat3', active: false),
 
-        GameSprite( id: 'falling-start', x: 82, y: 8, spriteName: 'falling-start', active: false),
+        GameSprite(id: 'falling-start', x: 82, y: 8, spriteName: 'falling-start', active: false),
 
-        GameSprite( id: 'falling-1-1', x: 63, y: 12, spriteName: 'falling-1-1', active: false),
-        GameSprite( id: 'falling-1-2', x: 46, y: 20, spriteName: 'falling-1-2', active: false),
-        GameSprite( id: 'falling-1-3', x: 27, y: 47, spriteName: 'falling-1-3', active: false),
+        GameSprite(id: 'falling-1-1', x: 63, y: 12, spriteName: 'falling-1-1', active: false),
+        GameSprite(id: 'falling-1-2', x: 46, y: 20, spriteName: 'falling-1-2', active: false),
+        GameSprite(id: 'falling-1-3', x: 27, y: 47, spriteName: 'falling-1-3', active: false),
 
-        GameSprite( id: 'falling-2-1', x: 72, y: 15, spriteName: 'falling-2-1', active: false),
-        GameSprite( id: 'falling-2-2', x: 63, y: 27, spriteName: 'falling-2-2', active: false),
-        GameSprite( id: 'falling-2-3', x: 59, y: 51, spriteName: 'falling-2-3', active: false),
+        GameSprite(id: 'falling-2-1', x: 72, y: 15, spriteName: 'falling-2-1', active: false),
+        GameSprite(id: 'falling-2-2', x: 63, y: 27, spriteName: 'falling-2-2', active: false),
+        GameSprite(id: 'falling-2-3', x: 59, y: 51, spriteName: 'falling-2-3', active: false),
 
-        GameSprite( id: 'falling-3-1', x: 79, y: 16, spriteName: 'falling-3-1', active: false),
-        GameSprite( id: 'falling-3-2', x: 82, y: 25, spriteName: 'falling-3-2', active: false),
-        GameSprite( id: 'falling-3-3', x: 90, y: 47, spriteName: 'falling-3-3', active: false),
+        GameSprite(id: 'falling-3-1', x: 79, y: 16, spriteName: 'falling-3-1', active: false),
+        GameSprite(id: 'falling-3-2', x: 82, y: 25, spriteName: 'falling-3-2', active: false),
+        GameSprite(id: 'falling-3-3', x: 90, y: 47, spriteName: 'falling-3-3', active: false),
 
-        GameSprite( id: 'drowing-1-1', x: 17, y: 78, spriteName: 'drowing-1', active: false),
-        GameSprite( id: 'drowing-1-2', x: 23, y: 90, spriteName: 'drowing-2', active: false),
+        GameSprite(id: 'drowing-1-1', x: 17, y: 78, spriteName: 'drowing-1', active: false),
+        GameSprite(id: 'drowing-1-2', x: 23, y: 90, spriteName: 'drowing-2', active: false),
 
-        GameSprite( id: 'drowing-2-1', x: 56, y: 78, spriteName: 'drowing-1', active: false),
-        GameSprite( id: 'drowing-2-2', x: 62, y: 90, spriteName: 'drowing-2', active: false),
+        GameSprite(id: 'drowing-2-1', x: 56, y: 78, spriteName: 'drowing-1', active: false),
+        GameSprite(id: 'drowing-2-2', x: 62, y: 90, spriteName: 'drowing-2', active: false),
 
-        GameSprite( id: 'drowing-3-1', x: 88, y: 78, spriteName: 'drowing-1', active: false),
-        GameSprite( id: 'drowing-3-2', x: 94, y: 90, spriteName: 'drowing-2', active: false),
+        GameSprite(id: 'drowing-3-1', x: 88, y: 78, spriteName: 'drowing-1', active: false),
+        GameSprite(id: 'drowing-3-2', x: 94, y: 90, spriteName: 'drowing-2', active: false),
+
+        GameSprite(id: 'miss-label', x: 110, y: 84, spriteName: 'miss-label', active: true),
+        GameSprite(id: 'miss-marker-1', x: 122, y: 91, spriteName: 'miss-marker', active: false),
+        GameSprite(id: 'miss-marker-2', x: 116, y: 91, spriteName: 'miss-marker', active: false),
+        GameSprite(id: 'miss-marker-3', x: 110, y: 91, spriteName: 'miss-marker', active: false),
       ]
   );
 

@@ -29,4 +29,6 @@ flutter:
     - family: Firealistic
       fonts:
         - asset: assets/fonts/firealistic-regular.otf
-        
+    - family: Crystal 
+      fonts:
+        - asset: assets/fonts/CrystalItalic-R6A.ttf

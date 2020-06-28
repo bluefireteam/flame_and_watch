@@ -26,6 +26,8 @@ abstract class FlameWatchGameController {
 
   FlameWatchGameController(this.cartridge);
 
+  String counterText;
+
   GameSprite findSprite(String id) {
     return cartridge.gameSprites.firstWhere(
         (s) => s.id == id,

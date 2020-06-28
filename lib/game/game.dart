@@ -3,6 +3,7 @@ import 'package:flame/flame.dart';
 import 'package:flame/sprite.dart';
 import 'package:flame/position.dart';
 import 'package:flame/time.dart';
+import 'package:flame/text_config.dart';
 
 import 'dart:ui';
 import 'dart:math';
@@ -48,7 +49,11 @@ class FlameWatchGame extends Game {
     }).toList();
     await Future.wait(spriteLoading);
 
-    game._gameLayer = _GameLayer(game._loadedSprites, gameCartridge);
+    game._gameLayer = _GameLayer(
+        game._loadedSprites,
+        gameCartridge,
+        controller,
+    );
 
     final _backgroundImage = await Flame.images.fromBase64(
       '${gameCartridge.gameName}-background-image',
@@ -120,8 +125,16 @@ class _BackgroundLayer extends PreRenderedLayer {
 class _GameLayer extends DynamicLayer {
   Map<String, Sprite> sprites;
   FlameWatchGameCartridge cartridge;
+  FlameWatchGameController controller;
 
-  _GameLayer(this.sprites, this.cartridge) {
+  final TextConfig _counterTextConfig = TextConfig(
+      fontSize: 14,
+      color: const Color(0xFF000000),
+      fontFamily: 'Crystal',
+  );
+  final _counterTextPosition = Position(5, 5);
+
+  _GameLayer(this.sprites, this.cartridge, this.controller) {
     preProcessors.add(
       ShadowProcessor(
         offset: Offset(2, 2),
@@ -132,6 +145,12 @@ class _GameLayer extends DynamicLayer {
 
   @override
   void drawLayer() {
+    _counterTextConfig.render(
+        canvas,
+        controller.counterText,
+        _counterTextPosition,
+    );
+
     cartridge.gameSprites.forEach((gameSprite) {
       if (gameSprite.active) {
         final pos = Position(gameSprite.x, gameSprite.y);
