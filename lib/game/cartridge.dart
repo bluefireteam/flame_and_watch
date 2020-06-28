@@ -15,6 +15,10 @@ class GameSprite {
     @required this.spriteName,
     @required this.active,
   });
+
+  void toggle() {
+    active = !active;
+  }
 }
 
 abstract class FlameWatchGameController {
@@ -36,11 +40,13 @@ abstract class FlameWatchGameController {
 
 class FlameWatchGameCartridge {
   String gameName;
+  String background;
   Map<String, String> sprites;
 
   List<GameSprite> gameSprites = [];
 
   FlameWatchGameCartridge({
+    @required this.background,
     @required this.gameName,
     @required this.sprites,
     @required this.gameSprites,

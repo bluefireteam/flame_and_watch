@@ -8,19 +8,26 @@ import 'dart:ui';
 import 'dart:math';
 
 import './cartridge.dart';
+import './layer.dart';
+import './processors.dart';
 
 class FlameWatchGame extends Game {
 
-  static const GAME_RESOLUTION = const Size(160, 144);
+  static Paint _backgroundPaint = Paint()..color = const Color(0xFF8D9E8C);
+  static const GAME_RESOLUTION = const Size(128, 96);
+  static Rect gameRect = Rect.fromLTWH(0, 0, GAME_RESOLUTION.width, GAME_RESOLUTION.height);
 
-  final _opaquePaint = Paint()..color = Color(0xFFFFFFFF).withOpacity(0.1);
-
-  FlameWatchGameCartridge _cartridge;
   FlameWatchGameController _controller;
-  double _gameScale;
   Timer _ticker;
 
+  _BackgroundLayer _backgroundLayer;
+  _GameLayer _gameLayer;
   Map<String, Sprite> _loadedSprites = {};
+
+  double _gameScale;
+  double _offset;
+
+  Rect _screenRect;
 
   FlameWatchGame() {
     _ticker = Timer(0.5, repeat: true, callback: _tick)..start();
@@ -32,7 +39,7 @@ class FlameWatchGame extends Game {
       FlameWatchGameController controller,
     ) async {
     final game = FlameWatchGame()
-        .._cartridge = gameCartridge
+        .._screenRect = Rect.fromLTWH(0, 0, gameSize.width, gameSize.height)
         .._controller = controller;
 
     final spriteLoading = gameCartridge.sprites.entries.map((entry) {
@@ -43,12 +50,21 @@ class FlameWatchGame extends Game {
     }).toList();
     await Future.wait(spriteLoading);
 
+    game._gameLayer = _GameLayer(game._loadedSprites, gameCartridge);
+
+    final _backgroundImage = await Flame.images.fromBase64(
+        '${gameCartridge.gameName}-background-image',
+        gameCartridge.background,
+    );
+    game._backgroundLayer = _BackgroundLayer(Sprite.fromImage(_backgroundImage));
+
     final scaleRaw = min(
         gameSize.height / GAME_RESOLUTION.height,
         gameSize.width / GAME_RESOLUTION.width,
     );
 
     game._gameScale = scaleRaw - scaleRaw % 0.02; 
+    game._offset = (gameSize.width - GAME_RESOLUTION.width * game._gameScale) / 2;
 
     return game;
   }
@@ -65,21 +81,15 @@ class FlameWatchGame extends Game {
   @override
   void render(Canvas canvas) {
     canvas.save();
+    canvas.drawRect(_screenRect, _backgroundPaint);
+    canvas.translate(_offset, 0);
     canvas.scale(_gameScale, _gameScale);
-
-    _cartridge.gameSprites.forEach((gameSprite) {
-      final pos = Position(gameSprite.x, gameSprite.y);
-      _loadedSprites[gameSprite.spriteName].renderPosition(
-          canvas,
-          pos,
-          overridePaint: gameSprite.active ? null : _opaquePaint
-      );
-    });
+    
+    canvas.clipRect(gameRect);
+    _backgroundLayer.render(canvas);
+    _gameLayer.render(canvas);
     canvas.restore();
   }
-
-  @override
-  Color backgroundColor() => const Color(0xFF8D9E8C);
 
   void onLeft() {
     _controller.onLeft();
@@ -87,5 +97,51 @@ class FlameWatchGame extends Game {
 
   void onRight() {
     _controller.onRight();
+  }
+}
+
+class _BackgroundLayer extends PreRenderedLayer {
+  Sprite background;
+
+  _BackgroundLayer(this.background) {
+    preProcessors.add(
+        ShadowProcessor(
+            offset: Offset(1, 1),
+            color: const Color(0xFFFFFFFF),
+            opacity: 0.2,
+        ),
+    );
+  }
+
+  @override
+  void drawLayer() {
+    background.renderPosition(canvas, Position(0, 0));
+  }
+}
+
+class _GameLayer extends DynamicLayer {
+  Map<String, Sprite> sprites;
+  FlameWatchGameCartridge cartridge;
+
+  _GameLayer(this.sprites, this.cartridge) {
+    preProcessors.add(
+        ShadowProcessor(
+            offset: Offset(2, 2),
+            opacity: 0.2,
+        ),
+    );
+  }
+
+  @override
+  void drawLayer() {
+    cartridge.gameSprites.forEach((gameSprite) {
+      if (gameSprite.active) {
+        final pos = Position(gameSprite.x, gameSprite.y);
+        sprites[gameSprite.spriteName].renderPosition(
+            canvas,
+            pos,
+        );
+      }
+    });
   }
 }

@@ -15,13 +15,13 @@ class _ConsoleState extends State<Console> {
   @override
   Widget build(_) {
     return Container(
-      padding: EdgeInsets.only(top: 25, bottom: 25),
+      padding: EdgeInsets.only(top: 20, bottom: 20),
       decoration: BoxDecoration(
         color: Color(0xffc6cacb),
         border: Border(
-          top: BorderSide(width: 15, color: Color(0xFF8a3842)),
-          left: BorderSide(width: 15, color: Color(0xFF7b323b)),
-          right: BorderSide(width: 15, color: Color(0xFF6e2d35)),
+          top: BorderSide(width: 10, color: Color(0xFF8a3842)),
+          left: BorderSide(width: 10, color: Color(0xFF7b323b)),
+          right: BorderSide(width: 10, color: Color(0xFF6e2d35)),
           bottom: BorderSide(width: 10, color: Color(0xff662a31)),
         ),
       ),
@@ -45,15 +45,24 @@ class _ConsoleState extends State<Console> {
                       children: [
                         Text(
                           'FLAME',
-                          style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                          style: TextStyle(
+                              fontFamily: 'Firealistic',
+                              fontSize: 20,
+                              color: Color(0xff8a3842)),
                         ),
                         Text(
                           '&',
-                          style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                          style: TextStyle(
+                              fontFamily: 'Firealistic',
+                              fontSize: 20,
+                              color: Color(0xff8a3842)),
                         ),
                         Text(
                           'WATCH',
-                          style: TextStyle(fontFamily: 'Firealistic', fontSize: 20, color: Color(0xff8a3842)),
+                          style: TextStyle(
+                              fontFamily: 'Firealistic',
+                              fontSize: 20,
+                              color: Color(0xff8a3842)),
                         ),
                       ],
                     ),
@@ -73,6 +82,7 @@ class _ConsoleState extends State<Console> {
                         '< LEFT',
                         style: TextStyle(
                           fontFamily: 'Liberation Sans',
+                          fontWeight: FontWeight.bold,
                           fontSize: 20,
                         ),
                       ),
@@ -89,14 +99,15 @@ class _ConsoleState extends State<Console> {
               decoration: BoxDecoration(
                 color: Color(0xffc6cacb),
                 border: Border(
-                  top: BorderSide(width: 15, color: Color(0xFFb2b6b8)),
-                  left: BorderSide(width: 15, color: Color(0xFFbabebf)),
-                  right: BorderSide(width: 15, color: Color(0xFFbabebf)),
-                  bottom: BorderSide(width: 15, color: Color(0xffa6a9ab)),
+                  top: BorderSide(width: 10, color: Color(0xFFb2b6b8)),
+                  left: BorderSide(width: 10, color: Color(0xFFbabebf)),
+                  right: BorderSide(width: 10, color: Color(0xFFbabebf)),
+                  bottom: BorderSide(width: 10, color: Color(0xffa6a9ab)),
                 ),
               ),
               child: Container(
-                padding: EdgeInsets.only(right: 8, left: 8, top: 10, bottom: 10),
+                padding:
+                    EdgeInsets.only(right: 8, left: 8, top: 10, bottom: 10),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
@@ -107,15 +118,16 @@ class _ConsoleState extends State<Console> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Color(0xffc6cacb),
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
                       color: Color(0xff662a31),
-                      width: 12,
+                      width: 8,
                     ),
                   ),
                   child: LayoutBuilder(
                     builder: (ctx, constraints) {
-                      final size = Size(constraints.maxWidth, constraints.maxHeight);
+                      final size =
+                          Size(constraints.maxWidth, constraints.maxHeight);
 
                       return FutureBuilder<FlameWatchGame>(
                         future: loadSampleGame(size),
@@ -155,6 +167,7 @@ class _ConsoleState extends State<Console> {
                       'RIGHT >',
                       style: TextStyle(
                         fontFamily: 'Liberation Sans',
+                        fontWeight: FontWeight.bold,
                         fontSize: 20,
                       ),
                     ),
