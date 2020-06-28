@@ -16,6 +16,9 @@ class Console extends StatefulWidget {
 
 class _ConsoleState extends State<Console> {
   FlameWatchGame _game;
+  String activeGame = 'PARACHUTE';
+
+  bool isParachuteGame() => activeGame == 'PARACHUTE';
 
   @override
   Widget build(_) {
@@ -87,7 +90,7 @@ class _ConsoleState extends State<Console> {
                 final size = Size(constraints.maxWidth, constraints.maxHeight);
 
                 return FutureBuilder<FlameWatchGame>(
-                  future: loadClockGame(size),
+                  future: isParachuteGame() ? loadParachuteGame(size) : loadClockGame(size),
                   builder: (_, snapshot) {
                     _game = snapshot.data;
                     if (snapshot.hasData) {
@@ -124,7 +127,11 @@ class _ConsoleState extends State<Console> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, top: 20),
                   child: OptionButton(
-                    onClick: () {},
+                    onClick: () {
+                      setState(() {
+                        activeGame = 'PARACHUTE';
+                      });
+                    },
                     label: 'Game',
                     size: 35,
                   ),
@@ -132,7 +139,11 @@ class _ConsoleState extends State<Console> {
                 Padding(
                   padding: EdgeInsets.only(left: 20, top: 15),
                   child: OptionButton(
-                    onClick: () {},
+                    onClick: () {
+                      setState(() {
+                        activeGame = 'CLOCK';
+                      });
+                    },
                     label: 'Time',
                     size: 35,
                   ),
