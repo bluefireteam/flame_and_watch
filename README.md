@@ -6,8 +6,6 @@ Flutter Hackathon 2020 by Fireslime.
 
 Flame and Watch is a recreation of the retro, nostalgic, Game and Watch console in Flutter, trying to keep up with the console limitations.
 
-Try it online [here](https://fireslime.xyz/flame_and_watch) (web is still unstable, but give it a try!)
-
 ## Credits
 
 Game developed by the Fireslime Team
